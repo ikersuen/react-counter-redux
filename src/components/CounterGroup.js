@@ -20,10 +20,12 @@ constructor(props) {
         return { number: 0, id: new Date().getTime + Math.random() };
       })
     })
-    this.props.dispatch({
-      type: "REINITSUM",
-      payload: 0
-    })
+    this.props.dispatch(
+      {
+        type: "REINITSUM_AND_CLEARFIELD",
+        payload: ''
+      }
+    )
   }
 
   //when press onincrease or ondecrease, update state by redux instead of setState
@@ -74,7 +76,7 @@ constructor(props) {
           counterNum={counterItem.number}/>
           )
         )}
-        <input type="text" ref="countInput" />
+        <input type="text" ref="countInput" value={this.props.inputField}/>
         <button onClick={this.changeSize}>
         generate
         </button>
@@ -87,7 +89,8 @@ constructor(props) {
 //map state from reduce index.js
 const mapStateToProps = state => ({
   //construct counterSum to store state and act as props
-  counterSum: state.sum
+  counterSum: state.sum,
+  inputField: state.inputField
 }); 
 
 connect(mapStateToProps)(CounterGroup)
