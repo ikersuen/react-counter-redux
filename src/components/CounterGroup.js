@@ -18,9 +18,11 @@ constructor(props) {
       .fill(0)
       .map(() => {
         return { number: 0, id: new Date().getTime + Math.random() };
-      }),
-      //Still don't know how to implement
-      sum: 0
+      })
+    })
+    this.props.dispatch({
+      type: "REINITSUM",
+      payload: 0
     })
   }
 
