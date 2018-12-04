@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Counter from './Counter.js'
-export default class CounterGroup extends Component {
+import { connect } from "react-redux";
+
+class CounterGroup extends Component {
 constructor(props) {
   super(props);
   this.state = {
@@ -17,6 +19,7 @@ constructor(props) {
       .map(() => {
         return { number: 0, id: new Date().getTime + Math.random() };
       }),
+      //Still don't know how to implement
       sum: 0
     })
   }
@@ -73,9 +76,18 @@ constructor(props) {
         <button onClick={this.changeSize}>
         generate
         </button>
-        <span>sum: {this.state.sum}</span>
+        <span>sum: {this.props.counterSum}</span>
       </div>
     )
   }
 }
 
+//map state from reduce index.js
+const mapStateToProps = state => ({
+  //construct counterSum to store state and act as props
+  counterSum: state.sum
+}); 
+
+connect(mapStateToProps)(CounterGroup)
+
+export default connect(mapStateToProps)(CounterGroup) 
