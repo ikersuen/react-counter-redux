@@ -4,8 +4,8 @@ export default class CounterGroup extends Component {
 constructor(props) {
   super(props);
   this.state = {
-      counter: [],
-      sum:0,
+      //take away sum state to inplement redux
+      //sum:0,
       counters: new Array(5).fill(0).map(() => {return {number: 0, id: new Date().getTime + Math.random()}})
   }
 }
@@ -21,8 +21,13 @@ constructor(props) {
     })
   }
 
+  //when press onincrease or ondecrease, update state by redux instead of setState
   updateSum=(delta) => {
-      this.setState({sum: this.state.sum+delta})
+      //this.setState({sum: this.state.sum+delta})
+      this.props.dispatch({
+        type: "COUNTERSUM",
+        payload: delta
+      })
   }
 
   increaseUpdate = (changedNum, id) => {
