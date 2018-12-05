@@ -8,24 +8,36 @@ constructor(props) {
   this.state = {
       //take away sum state to inplement redux
       //sum:0,
-      counters: new Array(5).fill(0).map(() => {return {number: 0, id: new Date().getTime + Math.random()}})
+      counters: new Array(this.props.defaultValue).fill(0).map(() => {return {number: 0, id: new Date().getTime + Math.random()}})
   }
+  this.props.dispatch(
+    {
+    type: "GENERATE_COUNTERS",
+    payload: parseInt(this.props.defaultValue)
+    }
+  )
 }
   
   changeSize = (event) => {
-    this.setState({
-      counters: new Array(parseInt(this.refs.countInput.value))
-      .fill(0)
-      .map(() => {
-        return { number: 0, id: new Date().getTime + Math.random() };
-      })
-    })
+    // this.setState({
+    //   counters: new Array(parseInt(this.refs.countInput.value))
+    //   .fill(0)
+    //   .map(() => {
+    //     return { number: 0, id: new Date().getTime + Math.random() };
+    //   })
+    // })
+        
     this.props.dispatch(
       {
-        type: "REINITSUM_AND_CLEARFIELD",
-        payload: ''
+        type: "GENERATE_COUNTERS",
+        payload: this.refs.countInput.value
       }
     )
+
+    this.props.dispatch({
+      type: "REINITSUM",
+      payload: 0
+    })
   }
 
   //when press onincrease or ondecrease, update state by redux instead of setState
@@ -38,35 +50,47 @@ constructor(props) {
   }
 
   increaseUpdate = (changedNum, id) => {
-    const counters = this.state.counters.map(
-      counterItem => {
-        if(counterItem.id === id){
-          return {number: counterItem.number + changedNum, id: id}
-        } else {
-          return counterItem
-        }
+    this.props.dispatch(
+      {
+        type: "INCREASE_ONE_COUNTER",
+        payload: {changedNum, id}
       }
     )
-    this.setState({counters: counters})
+    // const counters = this.state.counters.map(
+    //   counterItem => {
+    //     if(counterItem.id === id){
+    //       return {number: counterItem.number + changedNum, id: id}
+    //     } else {
+    //       return counterItem
+    //     }
+    //   }
+    // )
+    // this.setState({counters: counters})
   }
 
   decreaseUpdate = (changedNum, id) => {
-    const counters = this.state.counters.map(
-      counterItem => {
-        if(counterItem.id === id){
-          return {number: counterItem.number - changedNum, id: id}
-        } else {
-          return counterItem
-        }
+    this.props.dispatch(
+      {
+        type: "DECREASE_ONE_COUNTER",
+        payload: {changedNum, id}
       }
     )
-    this.setState({counters: counters})
+    // const counters = this.state.counters.map(
+    //   counterItem => {
+    //     if(counterItem.id === id){
+    //       return {number: counterItem.number - changedNum, id: id}
+    //     } else {
+    //       return counterItem
+    //     }
+    //   }
+    // )
+    // this.setState({counters: counters})
   }
 
   render() {
     return (
       <div>
-        {this.state.counters.map(counterItem => (
+        {this.props.counterItems.map(counterItem => (
           <Counter 
           key={counterItem.id}
           id={counterItem.id}
@@ -90,7 +114,8 @@ constructor(props) {
 const mapStateToProps = state => ({
   //construct counterSum to store state and act as props
   counterSum: state.sum,
-  inputField: state.inputField
+  inputField: state.inputField,
+  counterItems: state.counterItems
 }); 
 
 connect(mapStateToProps)(CounterGroup)

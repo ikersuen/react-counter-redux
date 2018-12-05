@@ -13,7 +13,7 @@ class App extends Component {
     return (
       <div>
       <Provider store={store}> 
-        <CounterGroup />
+        <CounterGroup defaultValue={5}/>
       </Provider>
       </div>
     );
